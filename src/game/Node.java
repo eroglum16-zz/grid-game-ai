@@ -6,14 +6,14 @@ public class Node {
 	private PlayerType player;
 	private GridState gridState;
 	private boolean isLeaf;
-	private int utility;
+	private int minimax;
 	private Action action;
 	private int redPlayerScore, bluePlayerScore;
 	private boolean playerGainedPoint;
 	
 	Node(Node parentNode, PlayerType player, GridState gridState, Action action, int redPlayerScore, int bluePlayerScore){
 		this.parentNode = parentNode;
-		this.player = player;
+		this.player = player; // The player that caused this node to be created
 		this.gridState = gridState;
 		this.action = action;
 		this.redPlayerScore = redPlayerScore;
@@ -32,12 +32,15 @@ public class Node {
 		}else this.playerGainedPoint = false;
 		
 		if(this.gridState.isTerminal()) {
+			minimax = redPlayerScore - bluePlayerScore;
 			this.setLeaf(true);
 		}else {
-			this.setLeaf(false);
+			if((this.player == PlayerType.RED) && (playerGainedPoint==false)) minimax = gridState.getR() * gridState.getC();
+			else if((this.player == PlayerType.RED) && (playerGainedPoint)) minimax = 0 - (gridState.getR() * gridState.getC());
+			else if ((this.player == PlayerType.BLUE) && (playerGainedPoint==false)) minimax = 0 - (gridState.getR() * gridState.getC());
+			else if ((this.player == PlayerType.BLUE) && (playerGainedPoint))  minimax = gridState.getR() * gridState.getC();
+			else minimax = 0 - (gridState.getR() * gridState.getC()); 
 		}
-		
-		if(this.isLeaf) this.utility = this.redPlayerScore - this.bluePlayerScore;
 		
 	}
 	
@@ -59,14 +62,6 @@ public class Node {
 
 	public void setLeaf(boolean isLeaf) {
 		this.isLeaf = isLeaf;
-	}
-
-	public int getUtility() {
-		return utility;
-	}
-
-	public void setUtility(int utility) {
-		this.utility = utility;
 	}
 
 	public Action getAction() {
@@ -99,6 +94,14 @@ public class Node {
 
 	public void setPlayerGainedPoint(boolean playerGainedPoint) {
 		this.playerGainedPoint = playerGainedPoint;
+	}
+
+	public int getMinimax() {
+		return minimax;
+	}
+
+	public void setMinimax(int minimax) {
+		this.minimax = minimax;
 	}
 	
 }

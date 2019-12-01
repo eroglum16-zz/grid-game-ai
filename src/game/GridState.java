@@ -19,6 +19,7 @@ public class GridState {
 		this.initializeHorizontals(horizontals);
 		this.initializeVerticals(verticals);
 		this.countBoxes();
+		this.setTerminal(false);
 	}
 	
 	GridState(int numberOfRows, int numberOfColumns, short[][] horizontalEdges, short[][] verticalEdges){
@@ -29,6 +30,7 @@ public class GridState {
 		this.verticalEdges		= verticalEdges;
 	
 		this.countBoxes();
+		this.terminalTest();
 	}
 	
 	void initializeHorizontals(short[] horizontals) {
@@ -52,21 +54,8 @@ public class GridState {
 	}
 	
 	private void terminalTest() {
-		boolean terminal = true;
-		
-		for(int i=0; i < R+1; i++) {
-			for(int j=0; j < C; j++) {
-				if(this.horizontalEdges[i][j]==0) terminal = false;
-			}
-		}
-		
-		for(int i=0; i < R; i++) {
-			for(int j=0; j < C+1; j++) {
-				if(this.verticalEdges[i][j]==0) terminal = false;
-			}
-		}
-		
-		this.setTerminal(terminal);
+		if(this.boxCount == R*C) setTerminal(true);
+		else setTerminal(false);
 	}
 	
 	private void countBoxes() {
