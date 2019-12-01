@@ -9,6 +9,7 @@ public class Node {
 	private int utility;
 	private Action action;
 	private int redPlayerScore, bluePlayerScore;
+	private boolean playerGainedPoint;
 	
 	Node(Node parentNode, PlayerType player, GridState gridState, Action action, int redPlayerScore, int bluePlayerScore){
 		this.parentNode = parentNode;
@@ -18,12 +19,17 @@ public class Node {
 		this.redPlayerScore = redPlayerScore;
 		this.bluePlayerScore = bluePlayerScore;
 		
-		int boxCountDifference = this.gridState.getBoxCount() - this.parentNode.getGridState().getBoxCount();
+		int boxCountDifference;
+		if(this.parentNode!=null) {
+			boxCountDifference = this.gridState.getBoxCount() - this.parentNode.getGridState().getBoxCount();
+		}else boxCountDifference = 0;
+		
 		
 		if(boxCountDifference > 0) {
-			if(player == PlayerType.RED) this.redPlayerScore++;
-			if(player == PlayerType.BLUE) this.bluePlayerScore++;
-		}
+			if(player == PlayerType.RED) this.redPlayerScore += boxCountDifference;
+			if(player == PlayerType.BLUE) this.bluePlayerScore += boxCountDifference;
+			this.playerGainedPoint = true;
+		}else this.playerGainedPoint = false;
 		
 		if(this.gridState.isTerminal()) {
 			this.setLeaf(true);
@@ -85,6 +91,14 @@ public class Node {
 
 	public void setBluePlayerScore(int bluePlayerScore) {
 		this.bluePlayerScore = bluePlayerScore;
+	}
+
+	public boolean isPlayerGainedPoint() {
+		return playerGainedPoint;
+	}
+
+	public void setPlayerGainedPoint(boolean playerGainedPoint) {
+		this.playerGainedPoint = playerGainedPoint;
 	}
 	
 }
