@@ -31,17 +31,10 @@ public class Main {
 		
 		int minimaxValue = basicAgent.solve(initialNode);
 		
-		int p1Score, p2Score;
-		if(minimaxValue < 0) {
-			p1Score = R*C-Math.abs(minimaxValue);
-			p2Score = Math.abs(minimaxValue);
-		}else {
-			p1Score = minimaxValue;
-			p2Score = R*C-minimaxValue;
-		}
+		int boxCount = R*C;
 		
-		System.out.println(p1Score);
-		System.out.println(p2Score);
+		System.out.println(minimaxValue);
+		System.out.println(boxCount-minimaxValue);
 
 	}
 

@@ -1,15 +1,17 @@
 package game;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Node {
 
 	private Node parentNode;
-	private PlayerType player;
+	private PlayerType player, nextPlayer;
 	private GridState gridState;
 	private boolean isLeaf;
-	private int minimax;
 	private Action action;
 	private int redPlayerScore, bluePlayerScore;
-	private boolean playerGainedPoint;
+	private List<Node> children; 
 	
 	Node(Node parentNode, PlayerType player, GridState gridState, Action action, int redPlayerScore, int bluePlayerScore){
 		this.parentNode = parentNode;
@@ -18,30 +20,34 @@ public class Node {
 		this.action = action;
 		this.redPlayerScore = redPlayerScore;
 		this.bluePlayerScore = bluePlayerScore;
+		this.children = new ArrayList<>();
+		this.isLeaf = false;
 		
-		int boxCountDifference;
+		int boxCountDifference=0;
 		if(this.parentNode!=null) {
 			boxCountDifference = this.gridState.getBoxCount() - this.parentNode.getGridState().getBoxCount();
-		}else boxCountDifference = 0;
-		
-		
-		if(boxCountDifference > 0) {
-			if(player == PlayerType.RED) this.redPlayerScore += boxCountDifference;
-			if(player == PlayerType.BLUE) this.bluePlayerScore += boxCountDifference;
-			this.playerGainedPoint = true;
-		}else this.playerGainedPoint = false;
-		
-		if(this.gridState.isTerminal()) {
-			minimax = redPlayerScore - bluePlayerScore;
-			this.setLeaf(true);
-		}else {
-			if((this.player == PlayerType.RED) && (playerGainedPoint==false)) minimax = gridState.getR() * gridState.getC();
-			else if((this.player == PlayerType.RED) && (playerGainedPoint)) minimax = 0 - (gridState.getR() * gridState.getC());
-			else if ((this.player == PlayerType.BLUE) && (playerGainedPoint==false)) minimax = 0 - (gridState.getR() * gridState.getC());
-			else if ((this.player == PlayerType.BLUE) && (playerGainedPoint))  minimax = gridState.getR() * gridState.getC();
-			else minimax = 0 - (gridState.getR() * gridState.getC()); 
 		}
 		
+		if(player == PlayerType.RED) {
+			nextPlayer = PlayerType.BLUE;
+		}else {
+			nextPlayer = PlayerType.RED;
+		}
+		
+		if(boxCountDifference > 0) {
+			if(player == PlayerType.RED) {
+				this.redPlayerScore += boxCountDifference;
+				this.nextPlayer = PlayerType.RED;
+			}
+			if(player == PlayerType.BLUE) {
+				this.bluePlayerScore += boxCountDifference;
+				this.nextPlayer = PlayerType.BLUE;
+			}
+		}
+		
+		if(this.gridState.isTerminal()) {
+			this.setLeaf(true);
+		}
 	}
 	
 	public Node getParentNode() {
@@ -88,20 +94,20 @@ public class Node {
 		this.bluePlayerScore = bluePlayerScore;
 	}
 
-	public boolean isPlayerGainedPoint() {
-		return playerGainedPoint;
+	public List<Node> getChildren() {
+		return children;
 	}
 
-	public void setPlayerGainedPoint(boolean playerGainedPoint) {
-		this.playerGainedPoint = playerGainedPoint;
+	public void addChild(Node child) {
+		this.children.add(child);
 	}
 
-	public int getMinimax() {
-		return minimax;
+	public PlayerType getNextPlayer() {
+		return nextPlayer;
 	}
 
-	public void setMinimax(int minimax) {
-		this.minimax = minimax;
+	public void setNextPlayer(PlayerType nextPlayer) {
+		this.nextPlayer = nextPlayer;
 	}
 	
 }
