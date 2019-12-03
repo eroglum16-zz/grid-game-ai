@@ -9,6 +9,14 @@ public abstract class Agent {
 	
 	abstract int minimax(Node node);
 	
+	protected int numberOfNodesEvaluated; 
+	
+	private long runningTime;
+	
+	Agent(){
+		numberOfNodesEvaluated = 0;
+	}
+	
 	public int solve (Node initialNode) {
 		
 		int R = initialNode.getGridState().getR();
@@ -40,16 +48,6 @@ public abstract class Agent {
 						
 						newGridState = new GridState(R, C, newHorizontalEdges, node.getGridState().getVerticalEdges());
 						
-						/*
-						if(node.isPlayerGainedPoint()) {
-							currentPlayer = node.getPlayer();
-						}else {
-							if(node.getPlayer() == PlayerType.RED) currentPlayer = PlayerType.BLUE;
-							else if(node.getPlayer() == PlayerType.BLUE) currentPlayer = PlayerType.RED;
-							// For the initial node
-							else currentPlayer = PlayerType.RED;
-						}	
-						*/
 						currentPlayer = node.getNextPlayer();
 						
 						action = new Action(EdgeType.HORIZONTAL, i, j);
@@ -74,17 +72,6 @@ public abstract class Agent {
 						newVerticalEdges[i][j] = 1;
 						
 						newGridState = new GridState(R, C, node.getGridState().getHorizontalEdges(), newVerticalEdges);
-
-						/*	
-						if(node.isPlayerGainedPoint()) {
-							currentPlayer = node.getPlayer();
-						}else {
-							if(node.getPlayer() == PlayerType.RED) currentPlayer = PlayerType.BLUE;
-							else if(node.getPlayer() == PlayerType.BLUE) currentPlayer = PlayerType.RED;
-							// For the initial node
-							else currentPlayer = PlayerType.RED;
-						}		
-						*/
 						
 						action = new Action(EdgeType.VERTICAL, i, j);
 						
@@ -101,29 +88,17 @@ public abstract class Agent {
 			}	
 		}
 		
-		return this.minimax(gameTree.get(0));
+		long startTime = System.nanoTime();
 		
-		/*
-		 for(int i=0; i < gameTree.size(); i++) {
-			if(gameTree.get(i).getPlayer()!=null) System.out.println("Player: " + gameTree.get(i).getPlayer().toString());
-			else System.out.println("Player: " + PlayerType.BLUE.toString());
-			
-			System.out.println("Red: " + gameTree.get(i).getRedPlayerScore());
-			System.out.println("Blue: " + gameTree.get(i).getBluePlayerScore());
-			
-			for(int j=0; j<gameTree.get(i).getGridState().getHorizontalEdges().length; j++) {
-				System.out.println("Horizontal (" + (j+1) + "): " + Arrays.toString(gameTree.get(i).getGridState().getHorizontalEdges()[j]));
-			}
-			
-			for(int j=0; j<gameTree.get(i).getGridState().getVerticalEdges().length; j++) {
-				System.out.println("Vertical (1): " + Arrays.toString(gameTree.get(i).getGridState().getVerticalEdges()[j]));
-			}
-			
-			System.out.println("Box count: " + gameTree.get(i).getGridState().getBoxCount());
-			for(int j=0; j<30; j++)System.out.print("-");
-			System.out.println();
-		}
-		*/
+		int result = this.minimax(gameTree.get(0));
 		
+		runningTime = System.nanoTime() - startTime;
+		
+		return result;
+		
+	}
+	
+	public long getRunningTime(){
+		return runningTime;
 	}
 }

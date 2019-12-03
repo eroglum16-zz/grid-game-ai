@@ -12,6 +12,7 @@ public class Node {
 	private Action action;
 	private int redPlayerScore, bluePlayerScore;
 	private List<Node> children; 
+	private int alpha, beta;
 	
 	Node(Node parentNode, PlayerType player, GridState gridState, Action action, int redPlayerScore, int bluePlayerScore){
 		this.parentNode = parentNode;
@@ -22,6 +23,8 @@ public class Node {
 		this.bluePlayerScore = bluePlayerScore;
 		this.children = new ArrayList<>();
 		this.isLeaf = false;
+		this.setAlpha(-25);
+		this.setBeta(25);
 		
 		int boxCountDifference=0;
 		if(this.parentNode!=null) {
@@ -108,6 +111,22 @@ public class Node {
 
 	public void setNextPlayer(PlayerType nextPlayer) {
 		this.nextPlayer = nextPlayer;
+	}
+
+	public int getAlpha() {
+		return alpha;
+	}
+
+	public void setAlpha(int alpha) {
+		this.alpha = alpha;
+	}
+
+	public int getBeta() {
+		return beta;
+	}
+
+	public void setBeta(int beta) {
+		this.beta = beta;
 	}
 	
 }

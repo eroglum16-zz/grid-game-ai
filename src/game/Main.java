@@ -28,6 +28,7 @@ public class Main {
 		Node initialNode = new Node(null, null, initialGrid, null, redPlayerInitialScore, bluePlayerInitialScore);
 		
 		BasicAgent basicAgent = new BasicAgent();
+		//AdvancedAgent advancedAgent = new AdvancedAgent();
 		
 		int minimaxValue = basicAgent.solve(initialNode);
 		
@@ -35,7 +36,10 @@ public class Main {
 		
 		System.out.println(minimaxValue);
 		System.out.println(boxCount-minimaxValue);
-
+		
+		//System.out.println("Executed in " + (advancedAgent.getRunningTime()/1000) + " microseconds");
+		//System.out.println(advancedAgent.numberOfNodesEvaluated);
+		
 	}
 
 }

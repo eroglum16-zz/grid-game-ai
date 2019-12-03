@@ -8,7 +8,10 @@ import java.util.Queue;
 
 public class BasicAgent extends Agent{
 	
+	@Override
 	int minimax(Node node) {
+		
+		this.numberOfNodesEvaluated++;
 		
 		int minimaxValue, childMinimax;
 		boolean maxPlaying;
